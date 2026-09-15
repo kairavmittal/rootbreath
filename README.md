@@ -27,7 +27,7 @@ to anyone who needs them.
 Open index.html in any web browser. No installation needed.
 
 ## Live demo
-[Add your GitHub Pages link here after completing Step 5]
+https://kairavmittal31-stack.github.io/rootbreath/
 
 ## About Project Root
 Project Root is a free community wellness initiative in Crewe,
