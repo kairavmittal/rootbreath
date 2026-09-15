@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RootBreath — Pranayama for Rural Wellness</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --sage: #4a7c59;
+    --sage-light: #e8f0ea;
+    --earth: #8b5e3c;
+    --sky: #c5d8d1;
+    --sand: #f7f3ee;
+    --ink: #1e2d24;
+    --muted: #6b7c72;
+    --white: #ffffff;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--sand);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 2rem;
+    background: var(--white);
+    border-bottom: 1px solid #e0e8e3;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--sage);
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--earth); font-style: italic; }
+  nav p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    max-width: 320px;
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 4rem 2rem 3rem;
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .hero h1 em { color: var(--sage); font-style: italic; }
+  .hero p {
+    font-size: 1.05rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto 2rem;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--sage-light);
+    color: var(--sage);
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* TECHNIQUE GRID */
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .techniques {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    max-width: 900px;
+    margin: 0 auto 3rem;
+    padding: 0 1.5rem;
+  }
+  .technique-card {
+    background: var(--white);
+    border: 1.5px solid #dce8e0;
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    text-align: left;
+  }
+  .technique-card:hover {
+    border-color: var(--sage);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74,124,89,0.12);
+  }
+  .technique-card.active {
+    border-color: var(--sage);
+    background: var(--sage-light);
+  }
+  .tc-icon { font-size: 1.6rem; margin-bottom: 8px; }
+  .tc-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .tc-sanskrit {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .tc-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+  .tc-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 8px;
+  }
+  .beginner { background: #e8f5e9; color: #2e7d32; }
+  .intermediate { background: #fff3e0; color: #e65100; }
+  .calming { background: #e3f2fd; color: #1565c0; }
+
+  /* PRACTICE AREA */
+  .practice-area {
+    max-width: 600px;
+    margin: 0 auto 3rem;
+    padding: 0 1.5rem;
+  }
+  .practice-box {
+    background: var(--white);
+    border-radius: 16px;
+    border: 1.5px solid #dce8e0;
+    padding: 2rem;
+    text-align: center;
+  }
+  .practice-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+  }
+  .practice-subtitle {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  /* BREATHING CIRCLE */
+  .breath-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 1.5rem;
+  }
+  .breath-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3px solid var(--sage-light);
+  }
+  .breath-circle {
+    position: absolute;
+    inset: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #7ab893, var(--sage));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.1s ease;
+    box-shadow: 0 8px 32px rgba(74,124,89,0.3);
+  }
+  .breath-phase {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .breath-count {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.8rem;
+    color: var(--white);
+    line-height: 1;
+  }
+  .breath-total {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.7);
+    margin-top: 2px;
+  }
+
+  /* PROGRESS RING */
+  .progress-svg {
+    position: absolute;
+    inset: 0;
+    transform: rotate(-90deg);
+  }
+  .progress-track { fill: none; stroke: var(--sage-light); stroke-width: 3; }
+  .progress-fill {
+    fill: none;
+    stroke: var(--earth);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 565;
+    stroke-dashoffset: 565;
+    transition: stroke-dashoffset 1s linear;
+  }
+
+  /* PHASE GUIDE */
+  .phase-guide {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .phase-pill {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+    border: 1.5px solid #dce8e0;
+    color: var(--muted);
+    transition: all 0.3s;
+  }
+  .phase-pill.current {
+    background: var(--sage);
+    border-color: var(--sage);
+    color: white;
+    font-weight: 500;
+  }
+
+  /* CONTROLS */
+  .controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: var(--sage);
+    color: white;
+  }
+  .btn-primary:hover { background: #3a6647; }
+  .btn-secondary {
+    background: var(--sage-light);
+    color: var(--sage);
+  }
+  .btn-secondary:hover { background: #d4e8d8; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ROUNDS */
+  .rounds-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 1.2rem;
+  }
+  .rounds-label { font-size: 0.85rem; color: var(--muted); }
+  .rounds-display {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--ink);
+    min-width: 28px;
+    text-align: center;
+  }
+  .rounds-btn {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid #dce8e0;
+    background: white;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--sage);
+    transition: all 0.15s;
+  }
+  .rounds-btn:hover { background: var(--sage-light); border-color: var(--sage); }
+
+  /* STATS */
+  .session-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e8f0ea;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--sage);
+  }
+  .stat-label { font-size: 0.72rem; color: var(--muted); }
+
+  /* INSTRUCTIONS */
+  .instructions {
+    background: var(--sage-light);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin-top: 1.5rem;
+    text-align: left;
+  }
+  .instructions h4 {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--sage);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .instructions p { font-size: 0.82rem; color: var(--ink); line-height: 1.6; }
+
+  /* ABOUT */
+  .about {
+    background: var(--ink);
+    color: var(--sky);
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+  .about h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    color: var(--white);
+    margin-bottom: 0.8rem;
+  }
+  .about p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    max-width: 560px;
+    margin: 0 auto 0.6rem;
+    opacity: 0.8;
+  }
+  .about .creator {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    margin-top: 1.5rem;
+  }
+
+  /* COMPLETE STATE */
+  .complete-msg {
+    display: none;
+    background: var(--sage-light);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    color: var(--sage);
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 520px) {
+    nav p { display: none; }
+    .hero { padding: 2.5rem 1.25rem 2rem; }
+    .session-stats { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Root<span>Breath</span></div>
+  <p>Pranayama breathing tools for stress management in rural communities</p>
+</nav>
+
+<section class="hero">
+  <div class="hero-tag">🌿 Project Root Initiative — Crewe, Virginia</div>
+  <h1>Breath is the most powerful tool for <em>stress management</em> you already own.</h1>
+  <p>Free, science-backed Pranayama breathing exercises designed for rural communities with limited access to wellness resources. No equipment needed — just your breath.</p>
+</section>
+
+<div class="section-label">Choose a breathing technique</div>
+<div class="techniques" id="techniques">
+
+  <div class="technique-card active" onclick="selectTechnique(0)" id="card-0">
+    <div class="tc-icon">🌊</div>
+    <div class="tc-name">Box Breathing</div>
+    <div class="tc-sanskrit">Sama Vritti Pranayama</div>
+    <div class="tc-desc">Equal inhale, hold, exhale, hold. Balances the nervous system and builds focus under pressure.</div>
+    <span class="tc-badge beginner">Beginner</span>
+  </div>
+
+  <div class="technique-card" onclick="selectTechnique(1)" id="card-1">
+    <div class="tc-icon">🌙</div>
+    <div class="tc-name">4-7-8 Breathing</div>
+    <div class="tc-sanskrit">Natural Calming Breath</div>
+    <div class="tc-desc">Inhale 4, hold 7, exhale 8. Activates the parasympathetic nervous system for deep calm.</div>
+    <span class="tc-badge calming">Calming</span>
+  </div>
+
+  <div class="technique-card" onclick="selectTechnique(2)" id="card-2">
+    <div class="tc-icon">🔥</div>
+    <div class="tc-name">Breath of Fire</div>
+    <div class="tc-sanskrit">Kapalabhati Pranayama</div>
+    <div class="tc-desc">Rapid rhythmic exhales with passive inhales. Energizes the body and clears the mind.</div>
+    <span class="tc-badge intermediate">Intermediate</span>
+  </div>
+
+  <div class="technique-card" onclick="selectTechnique(3)" id="card-3">
+    <div class="tc-icon">🌿</div>
+    <div class="tc-name">Alternate Nostril</div>
+    <div class="tc-sanskrit">Nadi Shodhana Pranayama</div>
+    <div class="tc-desc">Alternate nostril breathing. Balances left and right brain hemispheres for clarity.</div>
+    <span class="tc-badge intermediate">Intermediate</span>
+  </div>
+
+</div>
+
+<div class="practice-area">
+  <div class="practice-box">
+
+    <div class="complete-msg" id="completeMsg">🙏 Session complete. Well done.</div>
+
+    <div class="practice-title" id="practiceTitle">Box Breathing</div>
+    <div class="practice-subtitle" id="practiceSub">Sama Vritti Pranayama — Equal ratio breathing</div>
+
+    <div class="breath-container">
+      <div class="breath-ring"></div>
+      <svg class="progress-svg" viewBox="0 0 200 200">
+        <circle class="progress-track" cx="100" cy="100" r="90"/>
+        <circle class="progress-fill" cx="100" cy="100" r="90" id="progressFill"/>
+      </svg>
+      <div class="breath-circle" id="breathCircle">
+        <div class="breath-phase" id="phaseLabel">Ready</div>
+        <div class="breath-count" id="countDisplay">—</div>
+        <div class="breath-total" id="roundDisplay">Round 1</div>
+      </div>
+    </div>
+
+    <div style="font-size:0.78rem;color:var(--muted);text-align:center;margin-bottom:6px;font-style:italic;letter-spacing:0.04em">SO — inhale &nbsp;·&nbsp; HUM — exhale &nbsp;·&nbsp; stillness — hold</div>
+    <div class="phase-guide" id="phaseGuide"></div>
+
+    <div class="rounds-control">
+      <span class="rounds-label">Rounds:</span>
+      <button class="rounds-btn" onclick="changeRounds(-1)">−</button>
+      <span class="rounds-display" id="roundsDisplay">5</span>
+      <button class="rounds-btn" onclick="changeRounds(1)">+</button>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-primary" id="startBtn" onclick="startSession()">Begin Practice</button>
+      <button class="btn btn-secondary" id="pauseBtn" onclick="pauseSession()" disabled>Pause</button>
+      <button class="btn btn-secondary" id="resetBtn" onclick="resetSession()">Reset</button>
+      <button class="btn btn-secondary" id="soundBtn" onclick="toggleSound()" title="Toggle sound">🔔 Sound On</button>
+    </div>
+
+    <div class="session-stats">
+      <div class="stat">
+        <div class="stat-num" id="statRounds">0</div>
+        <div class="stat-label">Rounds done</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statTime">0s</div>
+        <div class="stat-label">Time practiced</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statBreaths">0</div>
+        <div class="stat-label">Breath cycles</div>
+      </div>
+    </div>
+
+    <div class="instructions" id="instructions">
+      <h4>How to practice</h4>
+      <p id="instructionText">Sit comfortably with your spine tall. Inhale for 4 counts, hold for 4, exhale for 4, hold for 4. Used by Navy SEALs and emergency responders to regulate stress response.</p>
+    </div>
+
+  </div>
+</div>
+
+<section class="about">
+  <h2>Why RootBreath?</h2>
+  <p>Southside Virginia is a health desert. Limited access to mental health resources, few wellness programs, and high stress from economic hardship mean communities like Crewe have almost no structured tools for stress management.</p>
+  <p>RootBreath was built to change that — bringing ancient Pranayama science to anyone with a smartphone. These techniques are taught at Project Root's weekly community yoga classes in Crewe, Virginia.</p>
+  <p>Breath costs nothing. It requires no equipment. And it works.</p>
+  <div class="creator">Built by Kairav Mittal — Registered Yoga Teacher, Certified EMT, Founder of Project Root</div>
+</section>
+
+<script>
+// ── AUDIO ENGINE — SO HUM Himalayan Tradition ────────────
+// Inspired by the SO HUM mantra technique of the Himalayan tradition
+// as taught by Master Kamal (KriYoga / KayaMana) to Kairav Mittal.
+// SO (inhale) = "I am" — HUM (exhale) = "that"
+// The breath becomes the mantra.
+
+let audioCtx = null;
+let soundEnabled = true;
+let activeNodes = [];  // track all running nodes for clean teardown
+
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function stopAllNodes() {
+  activeNodes.forEach(({ osc, gain }) => {
+    try {
+      gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
+      const o = osc;
+      setTimeout(() => { try { o.stop(); } catch(e) {} }, 350);
+    } catch(e) {}
+  });
+  activeNodes = [];
+}
+
+// ── SO sound (inhale) ──────────────────────────────────────
+// Warm nasal "S" buzz into open "O" vowel resonance
+// Built from layered harmonics: fundamental + 2nd + 3rd partial
+// Mimics the resonant chest vibration of chanting "SOOOO"
+function playSO(duration) {
+  const ctx = getAudio();
+  const now = ctx.currentTime;
+  const masterGain = ctx.createGain();
+  masterGain.connect(ctx.destination);
+  masterGain.gain.setValueAtTime(0, now);
+  masterGain.gain.linearRampToValueAtTime(0.18, now + 0.5);        // slow breath-in swell
+  masterGain.gain.setValueAtTime(0.18, now + duration - 0.6);
+  masterGain.gain.linearRampToValueAtTime(0, now + duration);       // fade before phase ends
+
+  const partials = [
+    { freq: 136.1, gain: 1.0,  type: "sine" },    // fundamental — OM/SO root pitch
+    { freq: 272.2, gain: 0.35, type: "sine" },    // 2nd harmonic — warmth
+    { freq: 408.3, gain: 0.15, type: "sine" },    // 3rd harmonic — richness
+    { freq: 544.4, gain: 0.06, type: "sine" },    // 4th harmonic — subtle shimmer
+  ];
+
+  partials.forEach(({ freq, gain: vol, type }) => {
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(masterGain);
+    osc.type = type;
+    gain.gain.setValueAtTime(vol, now);
+
+    // SO: frequency rises very gently (opening vowel, chest expanding)
+    osc.frequency.setValueAtTime(freq, now);
+    osc.frequency.linearRampToValueAtTime(freq * 1.012, now + duration);
+
+    osc.start(now);
+    osc.stop(now + duration + 0.1);
+    activeNodes.push({ osc, gain: masterGain });
+  });
+
+  // Subtle breath noise layer — mimics actual "S" consonant airflow
+  const bufferSize = ctx.sampleRate * Math.min(duration, 3);
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data   = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1);
+  const noise  = ctx.createBufferSource();
+  noise.buffer = buffer;
+  const noiseFilter = ctx.createBiquadFilter();
+  noiseFilter.type = "bandpass";
+  noiseFilter.frequency.value = 3200;
+  noiseFilter.Q.value = 0.8;
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.setValueAtTime(0, now);
+  noiseGain.gain.linearRampToValueAtTime(0.018, now + 0.15);
+  noiseGain.gain.linearRampToValueAtTime(0.006, now + 0.6);
+  noiseGain.gain.linearRampToValueAtTime(0, now + duration);
+  noise.connect(noiseFilter);
+  noiseFilter.connect(noiseGain);
+  noiseGain.connect(ctx.destination);
+  noise.start(now);
+}
+
+// ── HUM sound (exhale) ────────────────────────────────────
+// Pure, single Tibetan bowl tone — 174Hz (lowest healing frequency)
+// Extremely gentle — no harmonics, no buzz, no complexity
+// Just one clean sine wave, very quiet, very soft fade
+// Like a distant bowl struck very lightly
+function playHUM(duration) {
+  const ctx = getAudio();
+  const now = ctx.currentTime;
+
+  // Single very gentle low-pass to round off any digital edge
+  const filter = ctx.createBiquadFilter();
+  filter.type = "lowpass";
+  filter.frequency.value = 300;
+  filter.Q.value = 0.1;
+  filter.connect(ctx.destination);
+
+  const gain = ctx.createGain();
+  gain.connect(filter);
+
+  // Ultra-gentle volume envelope — whisper quiet
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(0.06, now + 1.2);   // very slow rise
+  gain.gain.setValueAtTime(0.06, now + duration - 1.0);
+  gain.gain.linearRampToValueAtTime(0, now + duration);  // very slow fade
+
+  // Single pure sine — 174Hz — the lowest Solfeggio frequency
+  // Associated with grounding and pain relief in sound therapy
+  // Low enough to feel like a body resonance, not a note
+  const osc = ctx.createOscillator();
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(174, now);
+  // Almost imperceptible downward drift — like breath naturally releasing
+  osc.frequency.linearRampToValueAtTime(172, now + duration);
+  osc.connect(gain);
+  osc.start(now);
+  osc.stop(now + duration + 0.2);
+  activeNodes.push({ osc, gain });
+}
+
+// ── HOLD sound ────────────────────────────────────────────
+// Kumbhaka (breath retention) — still, neutral, spacious
+// Very soft Himalayan bowl-like shimmer — silence with presence
+function playHOLD(duration) {
+  const ctx = getAudio();
+  const now = ctx.currentTime;
+
+  // Soft singing bowl shimmer — 432Hz (Himalayan tuning)
+  const partials = [
+    { freq: 432,  gain: 0.07 },
+    { freq: 864,  gain: 0.03 },
+    { freq: 1296, gain: 0.01 },
+  ];
+
+  partials.forEach(({ freq, gain: vol }) => {
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(vol, now + 0.4);
+    gain.gain.setValueAtTime(vol, now + duration - 0.4);
+    gain.gain.linearRampToValueAtTime(0, now + duration);
+    osc.start(now);
+    osc.stop(now + duration + 0.1);
+    activeNodes.push({ osc, gain });
+  });
+}
+
+// ── Main phase dispatcher ─────────────────────────────────
+function startSustainedTone(label, duration) {
+  if (!soundEnabled) return;
+  try {
+    stopAllNodes();
+    const ctx = getAudio();
+    if (ctx.state === "suspended") ctx.resume();
+    const l = label.toLowerCase();
+    if (l.includes("inhale") || l.includes("so"))         playSO(duration);
+    else if (l.includes("exhale") || l.includes("hum"))   playHUM(duration);
+    else                                                   playHOLD(duration);
+  } catch(e) { console.warn("Audio error:", e); }
+}
+
+function stopSustainedTone() {
+  stopAllNodes();
+}
+
+// ── Session complete — ascending bowl tones ───────────────
+function playCompleteSound() {
+  if (!soundEnabled) return;
+  stopAllNodes();
+  try {
+    const ctx = getAudio();
+    [216, 432, 648, 864].forEach((f, i) => {
+      setTimeout(() => {
+        const osc  = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(f, ctx.currentTime);
+        gain.gain.setValueAtTime(0, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.14, ctx.currentTime + 0.08);
+        gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.2);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 1.3);
+      }, i * 380);
+    });
+  } catch(e) {}
+}
+
+function playTickSound() { /* no-op — sustained tone handles everything */ }
+
+function toggleSound() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === "suspended") audioCtx.resume();
+  soundEnabled = !soundEnabled;
+  if (!soundEnabled) stopAllNodes();
+  document.getElementById("soundBtn").textContent = soundEnabled ? "🔔 Sound On" : "🔕 Sound Off";
+}
+// ──────────────────────────────────────────────────────────
+
+const techniques = [
+  {
+    name: "Box Breathing",
+    sanskrit: "Sama Vritti Pranayama — Equal ratio breathing",
+    phases: [
+      { label: "Inhale", duration: 4, scale: 1.08 },
+      { label: "Hold", duration: 4, scale: 1.08 },
+      { label: "Exhale", duration: 4, scale: 0.94 },
+      { label: "Hold", duration: 4, scale: 0.94 }
+    ],
+    instruction: "Sit comfortably with your spine tall. Inhale for 4 counts, hold for 4, exhale for 4, hold for 4. Used by Navy SEALs and emergency responders to regulate stress response."
+  },
+  {
+    name: "4-7-8 Breathing",
+    sanskrit: "Natural Calming Breath — Parasympathetic activation",
+    phases: [
+      { label: "Inhale", duration: 4, scale: 1.08 },
+      { label: "Hold", duration: 7, scale: 1.08 },
+      { label: "Exhale", duration: 8, scale: 0.92 }
+    ],
+    instruction: "Place your tongue behind your upper front teeth. Inhale quietly through your nose for 4, hold for 7, exhale completely through your mouth for 8. Clinically shown to reduce anxiety in minutes."
+  },
+  {
+    name: "Breath of Fire",
+    sanskrit: "Kapalabhati Pranayama — Skull-shining breath",
+    phases: [
+      { label: "Exhale", duration: 1, scale: 0.92 },
+      { label: "Inhale", duration: 1, scale: 1.06 }
+    ],
+    instruction: "Sit tall with hands on knees. Pump your navel sharply inward on each exhale — the inhale is passive and automatic. Start with 20 pumps per round. Energizes the body and clears mental fog. Not recommended during pregnancy or on a full stomach."
+  },
+  {
+    name: "Alternate Nostril",
+    sanskrit: "Nadi Shodhana Pranayama — Channel-purifying breath",
+    phases: [
+      { label: "Inhale L", duration: 4, scale: 1.07 },
+      { label: "Hold", duration: 4, scale: 1.07 },
+      { label: "Exhale R", duration: 4, scale: 0.93 },
+      { label: "Inhale R", duration: 4, scale: 1.07 },
+      { label: "Hold", duration: 4, scale: 1.07 },
+      { label: "Exhale L", duration: 4, scale: 0.93 }
+    ],
+    instruction: "Use your right hand: thumb closes right nostril, ring finger closes left. Inhale left, hold both, exhale right, inhale right, hold both, exhale left. Balances left and right brain hemispheres."
+  }
+];
+
+let currentTech = 0;
+let targetRounds = 5;
+let currentRound = 0;
+let currentPhaseIdx = 0;
+let currentCount = 0;
+let sessionTime = 0;
+let breathCycles = 0;
+let timer = null;
+let sessionTimer = null;
+let running = false;
+let paused = false;
+
+function selectTechnique(idx) {
+  if (running) return;
+  document.querySelectorAll('.technique-card').forEach((c,i) => {
+    c.classList.toggle('active', i === idx);
+  });
+  currentTech = idx;
+  const t = techniques[idx];
+  document.getElementById('practiceTitle').textContent = t.name;
+  document.getElementById('practiceSub').textContent = t.sanskrit;
+  document.getElementById('instructionText').textContent = t.instruction;
+  buildPhaseGuide(idx);
+  resetSession();
+}
+
+function buildPhaseGuide(idx) {
+  const guide = document.getElementById('phaseGuide');
+  guide.innerHTML = '';
+  techniques[idx].phases.forEach((p, i) => {
+    const pill = document.createElement('div');
+    pill.className = 'phase-pill';
+    pill.id = `pill-${i}`;
+    pill.textContent = `${p.label} ${p.duration}s`;
+    guide.appendChild(pill);
+  });
+}
+
+function changeRounds(delta) {
+  if (running) return;
+  targetRounds = Math.max(1, Math.min(20, targetRounds + delta));
+  document.getElementById('roundsDisplay').textContent = targetRounds;
+}
+
+function startSession() {
+  if (paused) { resumeSession(); return; }
+  // Unlock AudioContext on first user gesture
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  running = true; paused = false;
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('pauseBtn').disabled = false;
+  document.getElementById('completeMsg').style.display = 'none';
+  currentRound = 0; currentPhaseIdx = 0; currentCount = 0; breathCycles = 0;
+  sessionTimer = setInterval(() => {
+    sessionTime++;
+    document.getElementById('statTime').textContent = sessionTime + 's';
+  }, 1000);
+  runPhase();
+}
+
+function runPhase() {
+  if (!running) return;
+  const t = techniques[currentTech];
+  const phase = t.phases[currentPhaseIdx];
+  currentCount = phase.duration;
+
+  document.querySelectorAll('.phase-pill').forEach((p,i) => p.classList.toggle('current', i === currentPhaseIdx));
+  document.getElementById('phaseLabel').textContent = phase.label;
+  startSustainedTone(phase.label, phase.duration);
+  document.getElementById('countDisplay').textContent = currentCount;
+  document.getElementById('roundDisplay').textContent = `Round ${currentRound + 1} of ${targetRounds}`;
+
+  const circle = document.getElementById('breathCircle');
+  circle.style.transform = `scale(${phase.scale})`;
+
+  const circumference = 565;
+  const fill = document.getElementById('progressFill');
+  fill.style.strokeDashoffset = circumference;
+  setTimeout(() => {
+    fill.style.transition = `stroke-dashoffset ${phase.duration}s linear`;
+    fill.style.strokeDashoffset = 0;
+  }, 50);
+
+  timer = setInterval(() => {
+    currentCount--;
+    document.getElementById('countDisplay').textContent = currentCount;
+    if (currentCount === 1) playTickSound();
+    if (currentCount <= 0) {
+      clearInterval(timer);
+      fill.style.transition = 'none';
+      nextPhase();
+    }
+  }, 1000);
+}
+
+function nextPhase() {
+  const t = techniques[currentTech];
+  currentPhaseIdx++;
+  if (currentPhaseIdx >= t.phases.length) {
+    currentPhaseIdx = 0;
+    currentRound++;
+    breathCycles++;
+    document.getElementById('statRounds').textContent = currentRound;
+    document.getElementById('statBreaths').textContent = breathCycles;
+    if (currentRound >= targetRounds) {
+      completeSession(); return;
+    }
+  }
+  runPhase();
+}
+
+function pauseSession() {
+  if (!running || paused) return;
+  paused = true;
+  clearInterval(timer);
+  clearInterval(sessionTimer);
+  stopSustainedTone();
+  document.getElementById('pauseBtn').textContent = 'Resume';
+  document.getElementById('pauseBtn').onclick = resumeSession;
+  document.getElementById('phaseLabel').textContent = 'Paused';
+}
+
+function resumeSession() {
+  paused = false;
+  sessionTimer = setInterval(() => {
+    sessionTime++;
+    document.getElementById('statTime').textContent = sessionTime + 's';
+  }, 1000);
+  document.getElementById('pauseBtn').textContent = 'Pause';
+  document.getElementById('pauseBtn').onclick = pauseSession;
+  runPhase();
+}
+
+function resetSession() {
+  running = false; paused = false;
+  clearInterval(timer); clearInterval(sessionTimer);
+  stopSustainedTone();
+  currentRound = 0; currentPhaseIdx = 0; currentCount = 0;
+  sessionTime = 0; breathCycles = 0;
+  document.getElementById('startBtn').disabled = false;
+  document.getElementById('pauseBtn').disabled = true;
+  document.getElementById('pauseBtn').textContent = 'Pause';
+  document.getElementById('pauseBtn').onclick = pauseSession;
+  document.getElementById('phaseLabel').textContent = 'Ready';
+  document.getElementById('countDisplay').textContent = '—';
+  document.getElementById('roundDisplay').textContent = `Round 1`;
+  document.getElementById('breathCircle').style.transform = 'scale(1)';
+  document.getElementById('statRounds').textContent = '0';
+  document.getElementById('statTime').textContent = '0s';
+  document.getElementById('statBreaths').textContent = '0';
+  document.getElementById('completeMsg').style.display = 'none';
+  document.getElementById('progressFill').style.strokeDashoffset = 565;
+  document.querySelectorAll('.phase-pill').forEach(p => p.classList.remove('current'));
+}
+
+function completeSession() {
+  running = false;
+  playCompleteSound();
+  clearInterval(timer); clearInterval(sessionTimer);
+  document.getElementById('completeMsg').style.display = 'block';
+  document.getElementById('startBtn').disabled = false;
+  document.getElementById('pauseBtn').disabled = true;
+  document.getElementById('phaseLabel').textContent = 'Done';
+  document.getElementById('countDisplay').textContent = '🙏';
+  document.getElementById('breathCircle').style.transform = 'scale(1)';
+  document.querySelectorAll('.phase-pill').forEach(p => p.classList.remove('current'));
+}
+
+// Init
+buildPhaseGuide(0);
+</script>
+</body>
+</html>
