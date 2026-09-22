@@ -15,7 +15,7 @@ RootBreath brings ancient Pranayama breathing science to anyone with a smartphon
 - Alternate Nostril (Nadi Shodhana) — mental balance
 
 ## Why I built this
-In 2024 I visited Crewe, VA and saw firsthand what stress does to people with no access to wellness resources. I founded Project Root to bring free yoga and breathing classes to the community. RootBreath extends that mission digitally — making these tools available 24/7 to anyone who needs them.
+In 2023 I visited Crewe, VA and saw firsthand what stress does to people with no access to wellness resources. I founded Project Root to bring free yoga and breathing classes to the community. RootBreath extends that mission digitally — making these tools available 24/7 to anyone who needs them.
 
 ## How to use
 Open index.html in any web browser. No installation needed.
